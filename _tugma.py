@@ -1,0 +1,27 @@
+from aiogram.types import InlineKeyboardMarkup , InlineKeyboardButton
+
+mainMenu = InlineKeyboardMarkup(row_width=2)
+adminMenu = InlineKeyboardMarkup(row_width=2)
+
+btnRandom = InlineKeyboardButton(text="Kuchuklar 🐕"  , callback_data="btnRandom" )
+btnRandom2 = InlineKeyboardButton(text="Mushuklar 🐈‍" , callback_data="btnRandom2")
+btnRandom3 = InlineKeyboardButton(text="Ilonlar 🐍" , callback_data="btnRandom3")
+btnRandom4 = InlineKeyboardButton(text="Quyonlar  🐇" , callback_data="btnRandom4")
+btnRandom5 = InlineKeyboardButton(text="Sichqonlar  🐁" , callback_data="btnRandom5")
+btnRandom6 = InlineKeyboardButton(text="Qushlar  🦚" , callback_data="btnRandom6")
+statik = InlineKeyboardButton(text="Statistika 📊"  , callback_data="stats" )
+foydalanuvchilar = InlineKeyboardButton(text="Foydalanuvchilar 👥" , callback_data="userfayl")
+# mainMenu.insert(btnRandom)
+# mainMenu.add(btnRandom2)
+# mainMenu.add(btnRandom3)
+# mainMenu.add(btnRandom4)
+mainMenu.row(btnRandom, btnRandom2)
+mainMenu.row(btnRandom3,btnRandom4)
+mainMenu.row(btnRandom5,btnRandom6)
+mainMenu.add(statik)
+
+xabar_yuborish = InlineKeyboardButton(text="Xabarlar ✍️"  , callback_data="sendmsg" )
+statlar = InlineKeyboardButton(text="Statistika 📊"  , callback_data="stats" )
+adminMenu.insert(xabar_yuborish)
+adminMenu.add(statlar)
+adminMenu.add(foydalanuvchilar)
