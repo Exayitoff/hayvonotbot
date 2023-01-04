@@ -120,18 +120,22 @@ async def stat(call: types.CallbackQuery):
           
 @dp.callback_query_handler(text="btnRandom3")
 async def randomize(message: types.Message):
-  taxmin = random.randint(1, 20)
-  link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=snakes&image_type=photo&pretty='+str(taxmin)
-  response = requests.get(link)
-  itlar= response.json()
-  hts = itlar["hits"]
-  lists = []
-  # taxmin = random.randint(1, 20)
-  print(taxmin, message.from_user.first_name)
-  for n in hts:
-    lists.append(n["largeImageURL"])
+  try:
+      taxmin = random.randint(1, 19)
+      link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=snakes&image_type=photo&pretty='+str(taxmin)
+      response = requests.get(link)
+      itlar= response.json()
+      hts = itlar["hits"]
+      lists = []
+      # taxmin = random.randint(1, 20)
+      # print(taxmin, message.from_user.first_name)
+      for n in hts:
+        lists.append(n["largeImageURL"])
 
-  await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Ilonlar 🐍", reply_markup=nav.mainMenu)
+      await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Ilonlar 🐍", reply_markup=nav.mainMenu)
+  except:
+    await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Ilonlar 🐍", reply_markup=nav.mainMenu)
+
           
 
 @dp.callback_query_handler(text="btnRandom4")
