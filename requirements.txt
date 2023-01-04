@@ -27,7 +27,6 @@ h2==3.2.0
 hpack==3.0.0
 hstspreload==2022.12.1
 httpcore==0.16.3
-httpx==0.23.2
 hyperframe==5.2.0
 idna==2.10
 importlib-metadata==5.2.0
