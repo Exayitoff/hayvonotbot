@@ -1,5 +1,5 @@
 from aiogram.types import InlineKeyboardMarkup , InlineKeyboardButton
-from maiin import *
+
 mainMenu = InlineKeyboardMarkup(row_width=2)
 bolm2 = InlineKeyboardMarkup(row_width=2)
 adminMenu = InlineKeyboardMarkup(row_width=2)
