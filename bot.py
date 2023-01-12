@@ -21,9 +21,21 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 admin = 693313498
+rek ={
+  "photo": "",
+  "text": "",
+  "btnname": "",
+  "url": ""
+}
+
+reklam = InlineKeyboardMarkup(row_width=2)
+
+rekbtn = InlineKeyboardButton(text="Kirish ✅", url="https://t.me/hayvonlar_rasmibot" )
+reklam.add(rekbtn)
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
+    print(message.photo)
     joinedFile = open("user.txt","r")
     joinedUsers = set()
     for line in joinedFile:
@@ -33,8 +45,7 @@ async def send_welcome(message: types.Message):
        joinedFile.write(str(message.chat.id)+ "\n")
        joinedUsers.add(message.chat.id)
     await bot.send_photo(message.from_user.id, "https://w0.peakpx.com/wallpaper/368/742/HD-wallpaper-cool-cat.jpg", caption=" <i>Assalomu alaykum </i> <b>"+message.from_user.first_name + "</b> <i>hush kelibsiz bo'limlardan birini tanlang va sizga bot qiziqarli rasmlar jo\'natadi</i>",parse_mode="HTML", reply_markup=nav.mainMenu)
-    # if message.from_user.id == admin:
-    #   await bot.send_photo(admin, "https://sliderzemo.cf/img/p3.jpg", caption="Salom Ezozbek hush kelibsiz Bot amringizga muntazir 😁",  reply_markup=nav.adminMenu)
+
 
 @dp.message_handler(commands=['admin'])
 async def admin_panel(message : types.Message):
@@ -42,41 +53,61 @@ async def admin_panel(message : types.Message):
       await bot.send_photo(admin, "https://sliderzemo.cf/img/p3.jpg", caption="Salom Ezozbek hush kelibsiz Bot amringizga muntazir 😁",  reply_markup=nav.adminMenu)
     else:
       await bot.send_message(chat_id=message.from_user.id, text="<i> Kechirasiz </i> <b>" + str(message.from_user.first_name) + "</b> <i> siz admin emassiz 😝 \n \n Bot admini: @MrXayitov </i>", parse_mode="HTML")
-# @dp.message_handler()
-# async def sendWiki(message: types.Message): 
-#   link = 'https://dog.ceo/api/breeds/image/random'
-#   response = requests.get(link)
-#   itlar= response.json()
-#   xbr=itlar['message']
-#   try:
-#     respond = wikipedia.summary(message.text)
-#     await message.answer(respond)
-#   except:
-#     await message.answer_photo(xbr)
+
+@dp.message_handler(content_types=["photo"])
+async def img(message : types.Message):
+  photo_id = message.photo[-1].file_id
+  rek["photo"] = photo_id
+  await bot.send_photo(chat_id=message.from_user.id, photo=photo_id , caption=rek["text"], reply_markup=reklam)
+
+
+
+
+@dp.message_handler()
+async def ads(message: types.Message): 
+  try:
+      if message.chat.id == admin :
+       if message.text.startswith('#caption'):
+        removeXabar = message.text.replace("#caption", "")
+        rek["text"] = removeXabar
+  except Exception as e:
+    print(e)
+@dp.message_handler()
+async def ads(message: types.Message): 
+  try:
+      if message.chat.id == admin :
+        if message.text.startswith('#btn'):
+          removeXabar = message.text.replace("#btn", "")
+          rek["btnname"] = removeXabar
+  except Exception as e:
+    print(e)
+
+
+@dp.message_handler()
+async def ads(message: types.Message): 
+  try:
+      if message.chat.id == admin :
+       if message.text.startswith('#url'):
+        removeXabar = message.text.replace("#url", "")
+        rek["url"] = removeXabar
+  except Exception as e:
+    print(e)
 
 @dp.message_handler()
 async def sendWiki(message: types.Message): 
   try:
     if message.chat.id == admin :
       if message.text.startswith('#xabar'):
-          removeXabar = message.text.replace("#xabar", "")
-          joinedFile = open("message.txt","r")
-          joinedUsers = set()
-          for line in joinedFile:
-            joinedUsers.add(line.strip())
-          if not str(removeXabar) in joinedUsers:
-            joinedFile = open("message.txt","a")
-            joinedFile.write(str(removeXabar)+ "\n")
-            joinedUsers.add(removeXabar)
-          print(removeXabar)
-          for user_s in open('user.txt'):
-            await bot.send_message(chat_id=user_s, text=removeXabar , parse_mode="HTML"  )
-    
+        for user_s in open('user.txt'):
+         print(rek)
+         await bot.send_photo(chat_id=user_s, photo=rek["photo"], caption=rek["text"], reply_markup=reklam, parse_mode="HTML"  )
+  except :
+    return True
 
 
-    # await bot.send_message(admin, message.text)
-  except:
-    await message.answer_photo("https://i.pinimg.com/originals/5d/33/a1/5d33a10d3d20c73125e66a1f3cb4a974.jpg")
+
+
+
 
 
 @dp.callback_query_handler(text="btnRandom")
@@ -146,7 +177,8 @@ async def randomize(message: types.Message):
   itlar= response.json()
   hts = itlar["hits"]
   lists = []
-  print(taxmin)
+  # print(taxmin)
+  
   for n in hts:
     lists.append(n["largeImageURL"])
 
@@ -179,6 +211,96 @@ async def randomize(message: types.Message):
     lists.append(n["largeImageURL"])
 
   await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Qushlar  🦚", reply_markup=nav.mainMenu)
+
+@dp.callback_query_handler(text="boshqa")
+async def edit(message : types.Message):
+  await bot.send_photo(chat_id=message.from_user.id, photo="https://i.pinimg.com/564x/ba/92/7f/ba927ff34cd961ce2c184d47e8ead9f6.jpg", caption=" <i>Assalomu alaykum </i> <b>"+message.from_user.first_name + "</b> <i>hush kelibsiz bo'limlardan birini tanlang va sizga bot qiziqarli rasmlar jo\'natadi</i>",parse_mode="HTML", reply_markup=nav.bolm2)
+
+
+
+@dp.callback_query_handler(text="otlar")
+async def randomize(message: types.Message):
+  taxmin = random.randint(1, 19)
+  link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=horses&image_type=photo&pretty='+str(taxmin)
+  response = requests.get(link)
+  itlar= response.json()
+  hts = itlar["hits"]
+  lists = []
+  for n in hts:
+    lists.append(n["largeImageURL"])
+  await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Otlar 🐎", reply_markup=nav.bolm2)
+
+@dp.callback_query_handler(text="pandalar")
+async def randomize(message: types.Message):
+  taxmin = random.randint(1, 19)
+  link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=white+panda&image_type=photo&pretty='+str(taxmin)
+  response = requests.get(link)
+  itlar= response.json()
+  hts = itlar["hits"]
+  lists = []
+  for n in hts:
+    lists.append(n["largeImageURL"])
+  await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Pandalar 🐼", reply_markup=nav.bolm2)
+
+
+@dp.callback_query_handler(text="pinvgin")
+async def randomize(message: types.Message):
+  taxmin = random.randint(1, 19)
+  link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=pinguin&image_type=photo&pretty='+str(taxmin)
+  response = requests.get(link)
+  itlar= response.json()
+  hts = itlar["hits"]
+  lists = []
+  for n in hts:
+    lists.append(n["largeImageURL"])
+  await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Pingvinlar 🐧", reply_markup=nav.bolm2)
+
+
+@dp.callback_query_handler(text="sherlar")
+async def randomize(message: types.Message):
+  taxmin = random.randint(1, 19)
+  link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=lion&image_type=photo&pretty='+str(taxmin)
+  response = requests.get(link)
+  itlar= response.json()
+  hts = itlar["hits"]
+  lists = []
+  for n in hts:
+    lists.append(n["largeImageURL"])
+  await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Sherlar 🦁", reply_markup=nav.bolm2)
+
+@dp.callback_query_handler(text="tovus")
+async def randomize(message: types.Message):
+  taxmin = random.randint(1, 19)
+  link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=peacock&image_type=photo&pretty='+str(taxmin)
+  response = requests.get(link)
+  itlar= response.json()
+  hts = itlar["hits"]
+  lists = []
+  for n in hts:
+    lists.append(n["largeImageURL"])
+  await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Tovuslar 🦚", reply_markup=nav.bolm2)
+
+
+
+@dp.callback_query_handler(text="tovuq")
+async def randomize(message: types.Message):
+  taxmin = random.randint(1, 19)
+  link = 'https://pixabay.com/api/?key=32452369-fb4ecba71876a7c19595878f8&q=chicken&image_type=photo&pretty='+str(taxmin)
+  response = requests.get(link)
+  itlar= response.json()
+  hts = itlar["hits"]
+  lists = []
+  for n in hts:
+    lists.append(n["largeImageURL"])
+  await bot.send_photo(message.from_user.id, lists[taxmin] , caption="Kulguli Tovuqlar 🐓 ", reply_markup=nav.bolm2)
+
+@dp.callback_query_handler(text="ortga")
+async def randomize(message: types.Message):
+
+  await bot.send_photo(chat_id=message.from_user.id, photo="https://w0.peakpx.com/wallpaper/368/742/HD-wallpaper-cool-cat.jpg", caption="Siz orqaga qaytdingiz 😜", reply_markup=nav.mainMenu)
+
+
+
 
 
 @dp.callback_query_handler(text="userfayl")
